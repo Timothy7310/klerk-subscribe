@@ -12,14 +12,17 @@ import BreadCrumbs from "@/components/BreadCrumbs.vue";
 
 const breadcrumbs = [
   {
+    id: 1,
     name: "Главная",
     path: "#",
   },
   {
+    id: 2,
     name: "Рассылки",
     path: "#",
   },
   {
+    id: 3,
     name: "Хлебные крошки",
     path: "#",
   },
