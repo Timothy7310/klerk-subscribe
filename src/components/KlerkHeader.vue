@@ -1,5 +1,5 @@
 <template>
-  <header class="flex flex-col items-center gap-6">
+  <header class="flex flex-col items-center gap-6 mb-6 px-4 py-0">
     <svg class="w-[70px] h-[36px]">
       <use href="@/assets/icons/sprite.svg#klerk"></use>
     </svg>
@@ -12,11 +12,11 @@ import BreadCrumbs from "@/components/BreadCrumbs.vue";
 
 const breadcrumbs = [
   {
-    name: "Хлебные крошки",
+    name: "Главная",
     path: "#",
   },
   {
-    name: "Хлебные крошки",
+    name: "Рассылки",
     path: "#",
   },
   {

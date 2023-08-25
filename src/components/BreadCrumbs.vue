@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <ul class="flex gap-2">
+    <ul class="flex gap-2 flex-wrap justify-center">
       <li
         v-for="(breadcrumb, index) in breadcrumbs"
         class="flex gap-2 items-center"
