@@ -35,7 +35,8 @@
     <div class="flex items-center mt-6 gap-2 col-[1_/_3] md:mt-4">
       <KlerkSwitch :options="options.switchOption" />
       <span class="font-roboto text-sm font-normal leading-5 text-black">
-        Уже получает {{ Number(options.readers).toLocaleString() }} человек
+        Уже получает {{ Number(options.readers).toLocaleString() }}
+        {{ readersPlural }}
       </span>
     </div>
     <picture class="col-[2] row-[1_/_3] table:row-[1_/_4]">
@@ -57,6 +58,7 @@
 <script setup lang="ts">
 import KlerkSwitch from "@/ui/KlerkSwitch.vue";
 import { NewsGoodsType } from "@/types/index";
+import { computed } from "vue";
 
 type Props = {
   options: {
@@ -87,6 +89,19 @@ type Props = {
 };
 
 const { options } = defineProps<Props>();
+
+const readersPlural = computed(() => {
+  const pr = new Intl.PluralRules();
+  const form = pr.select(options.readers);
+  const suffixes = new Map([
+    ["zero", "человек"],
+    ["one", "человек"],
+    ["few", "человека"],
+    ["many", "человек"],
+  ]);
+
+  return suffixes.get(form);
+});
 </script>
 
 <style></style>
