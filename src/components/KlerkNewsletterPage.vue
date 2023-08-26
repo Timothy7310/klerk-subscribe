@@ -5,7 +5,9 @@
     >
       Подписки «Клерка»
     </h1>
-    <div class="flex flex-wrap justify-center items-center gap-8 px-4 md:gap-6">
+    <div
+      class="flex flex-wrap items-center justify-around gap-[5px] px-4 md:gap-6 table:justify-center table:gap-4"
+    >
       <a class="navigation-link" href="#">Рассылки</a>
       <a class="navigation-link" href="#">Соцсети</a>
       <a class="navigation-link" href="#">Мессенджеры</a>

@@ -1,12 +1,12 @@
 <template>
   <h2
-    class="font-roboto text-2xl not-italic font-medium leading-8 tracking-[-0.24px] text-black mb-6 text-start table:text-center"
+    class="font-roboto text-2xl not-italic font-medium leading-8 tracking-[-0.24px] mb-4 text-black text-start table:text-center md:mb-6"
   >
     Выберите рассылки, которые подходят именно вам
   </h2>
 
   <form
-    class="mx-[25px] my-0 h-14 grid grid-cols-[1fr_max-content] bg-white rounded-[15px_100px_100px_15px] overflow-hidden"
+    class="h-14 grid grid-cols-[1fr_max-content] bg-white rounded-[15px_100px_100px_15px] overflow-hidden md:mx-[25px]"
   >
     <input
       class="font-roboto text-base font-normal leading-6 bg-transparent text-black p-4"
@@ -30,7 +30,7 @@
       </svg>
     </button>
   </form>
-  <div class="mx-[25px] my-0 flex items-center gap-2 mt-4">
+  <div class="flex items-center gap-2 mt-4 md:mx-[25px]">
     <KlerkSwitch :options="switchOption" />
     <span class="font-roboto text-sm font-normal leading-5">
       Подписаться на все рассылки
@@ -118,18 +118,18 @@ const newsList = [
     time: "После заката",
     title: "Ночной бухгалтер",
     about:
-      "Самая краткая газета о налогах и бухучете в мире — современная рассылка для чтения.",
+      "Самая краткая газета о налогах и бухучете в мире — современная рассылка для вечернего чтения.",
     goods: [
       {
-        text: "Анализ, оценка и только самое главное",
+        text: "Новости для бухгалтеров, ИП и директора",
         type: NewsGoodsType.Common,
       },
       {
-        text: "Лучшие комменты юзеров в обзоре",
+        text: "Подборка статей за день",
         type: NewsGoodsType.Common,
       },
     ],
-    readers: 37480,
+    readers: 59342,
     images: {
       smallOld: accountantDarkSmallOld,
       bigOld: accountantDarkBigOld,

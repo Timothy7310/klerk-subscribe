@@ -1,6 +1,6 @@
 <template>
   <article
-    class="bg-white shadow-[0px_8px_16px_0px_rgba(0,0,0,0.08)] grid grid-cols-[1fr_minmax(min-content,40px)] gap-x-6 px-4 py-6 rounded-2xl table:grid-cols-[1fr_minmax(min-content,80px)] md:p-6"
+    class="bg-white shadow-[0px_8px_16px_0px_rgba(0,0,0,0.08)] grid grid-cols-[1fr_minmax(min-content,40px)] gap-x-6 p-[22px_16px_24px_16px] rounded-2xl table:grid-cols-[1fr_minmax(min-content,80px)] md:p-[24px_24px_22px_24px]"
   >
     <span
       class="font-roboto text-[13px] font-normal leading-4 text-secondary--lighter col-[1]"
@@ -15,7 +15,7 @@
     >
       {{ options.about }}
     </p>
-    <ul class="flex flex-col gap-2 mt-4 col-[1_/_3]">
+    <ul class="flex flex-col gap-[7px] mt-4 col-[1_/_3]">
       <li v-for="good in options.goods" class="flex items-baseline gap-2">
         <svg class="w-4 h-4 fill-good shrink-0">
           <use href="@/assets/icons/sprite.svg#checked"></use>
@@ -32,7 +32,9 @@
         </span>
       </li>
     </ul>
-    <div class="flex items-center mt-6 gap-2 col-[1_/_3] md:mt-4">
+    <div
+      class="flex items-center mt-[22px] gap-4 col-[1_/_3] md:mt-[15px] md:gap-2"
+    >
       <KlerkSwitch :options="options.switchOption" />
       <span class="font-roboto text-sm font-normal leading-5 text-black">
         Уже получает {{ Number(options.readers).toLocaleString() }}
