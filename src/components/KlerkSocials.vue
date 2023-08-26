@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h2>Social</h2>
+    <h2>Socials</h2>
   </div>
 </template>

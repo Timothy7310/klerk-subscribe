@@ -6,9 +6,9 @@
         :key="breadcrumb.id"
         class="flex gap-2 items-center"
       >
-        <a :href="breadcrumb.path" class="breadcrumb-link">
+        <RouterLink class="breadcrumb-link" :to="breadcrumb.path">
           {{ breadcrumb.name }}
-        </a>
+        </RouterLink>
         <svg
           v-if="index !== breadcrumbs.length - 1"
           class="fill-secondary--lighter w-[13px] h-4"

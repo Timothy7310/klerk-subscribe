@@ -8,11 +8,17 @@
     <div
       class="flex flex-wrap items-center justify-around gap-[5px] px-4 md:gap-6 table:justify-center table:gap-4"
     >
-      <a class="navigation-link" href="#">Рассылки</a>
-      <a class="navigation-link" href="#">Соцсети</a>
-      <a class="navigation-link" href="#">Мессенджеры</a>
+      <RouterLink class="navigation-link" :to="{ name: 'Newsletter' }">
+        Рассылки
+      </RouterLink>
+      <RouterLink class="navigation-link" :to="{ name: 'Socials' }">
+        Соцсети
+      </RouterLink>
+      <RouterLink class="navigation-link" :to="{ name: 'Messangers' }">
+        Мессенджеры
+      </RouterLink>
     </div>
-    <KlerkNewsletterWrapper type="newsletter" />
+    <KlerkNewsletterWrapper />
   </section>
 </template>
 
@@ -22,6 +28,9 @@ import KlerkNewsletterWrapper from "@/components/KlerkNewsletterWrapper.vue";
 
 <style scoped>
 .navigation-link {
-  @apply font-roboto text-base font-normal leading-6 text-secondary transition-all duration-200 ease-in pb-3.5 border-b-2 border-b-transparent border-solid hover:font-medium hover:text-accent--lighter-1 hover:border-accent--lighter-1 md:pb-4;
+  @apply font-roboto text-base font-normal leading-6 text-secondary transition-all duration-200 ease-in pb-3.5 border-b-2 border-b-transparent border-solid hover:text-accent--lighter-1  md:pb-4;
+}
+.router-link-active {
+  @apply text-accent--lighter-1 border-accent--lighter-1 font-medium;
 }
 </style>
