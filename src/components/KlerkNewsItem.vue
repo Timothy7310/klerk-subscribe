@@ -35,7 +35,10 @@
     <div
       class="flex items-center mt-[22px] gap-4 col-[1_/_3] md:mt-[15px] md:gap-2"
     >
-      <KlerkSwitch :options="options.switchOption" />
+      <KlerkSwitch
+        :options="options.switchOption"
+        @toggle-switch="toggleSwitch"
+      />
       <span class="font-roboto text-sm font-normal leading-5 text-black">
         Уже получает {{ Number(options.readers).toLocaleString() }}
         {{ readersPlural }}
@@ -59,7 +62,7 @@
 
 <script setup lang="ts">
 import KlerkSwitch from "@/ui/KlerkSwitch.vue";
-import { NewsGoodsType } from "@/types/index";
+import { NewsGoodsType, SubscribeType } from "@/types/index";
 import { computed } from "vue";
 
 type Props = {
@@ -67,6 +70,7 @@ type Props = {
     id: number;
     time: string;
     title: string;
+    type: SubscribeType;
     about: string;
     goods: {
       text: string;
@@ -104,6 +108,11 @@ const readersPlural = computed(() => {
 
   return suffixes.get(form);
 });
+
+const emit = defineEmits(["updateSwitch"]);
+const toggleSwitch = (status: boolean) => {
+  emit("updateSwitch", { status, type: options.type });
+};
 </script>
 
 <style></style>

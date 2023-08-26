@@ -1,6 +1,6 @@
 <template>
   <button
-    @click="checked = !checked"
+    @click="toggleSwitch"
     type="button"
     role="switch"
     :aria-checked="checked"
@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { SubscribeType } from "@/types";
 
 type Props = {
   options: {
@@ -30,11 +31,18 @@ type Props = {
     backgroundColorHover: string;
     backgroundColorDot: string;
   };
+  type?: SubscribeType;
 };
 
-const { options } = defineProps<Props>();
+const { options, type } = defineProps<Props>();
 
 const checked = ref(options.checked);
+
+const emit = defineEmits(["toggleSwitch"]);
+const toggleSwitch = () => {
+  checked.value = !checked.value;
+  emit("toggleSwitch", checked.value);
+};
 </script>
 
 <style scoped>
