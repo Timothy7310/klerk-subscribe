@@ -9,14 +9,18 @@
     class="h-14 grid grid-cols-[1fr_max-content] bg-white rounded-[15px_100px_100px_15px] overflow-hidden md:mx-[25px]"
     @submit.prevent="submitForm"
   >
-    <input
-      class="font-roboto text-base font-normal leading-6 bg-transparent text-black p-4"
-      type="email"
-      v-model="usersInfo.email"
-      placeholder="Электронная почта"
-    />
+    <div class="relative">
+      <input
+        class="input"
+        type="email"
+        v-model="usersInfo.email"
+        placeholder=""
+        id="email"
+      />
+      <label class="label" for="email">Электронная почта</label>
+    </div>
     <button
-      class="font-roboto bg-accent text-base not-italic font-normal leading-6 text-white px-8 py-4 rounded-[100px]"
+      class="font-roboto bg-accent text-base not-italic font-normal leading-6 text-white px-8 py-4 rounded-[100px] hover:bg-accent--lighter-1 transition-all duration-200 ease-in"
       type="submit"
       v-if="!isMobile"
     >
@@ -306,4 +310,21 @@ onUnmounted(() => {
 });
 </script>
 
-<style></style>
+<style scoped>
+.input {
+  @apply absolute w-full h-full text-base leading-6 font-normal leading-6 text-black bg-transparent p-4 caret-accent--lighter-1 focus-visible:border-b-2 focus-visible:border-b-accent focus-visible:border-solid;
+}
+
+.label {
+  @apply absolute text-base leading-6 font-normal leading-6 pointer-events-none -translate-y-2/4 left-4 top-[calc(50%)] transition-all duration-200 ease-in;
+}
+.input:focus ~ .label,
+.input:not(:placeholder-shown) ~ .label {
+  @apply translate-x-[-58px] translate-y-[-47px] text-accent--lighter-1;
+  scale: 0.6;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+</style>
