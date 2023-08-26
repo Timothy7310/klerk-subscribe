@@ -273,9 +273,21 @@ const validate = () => {
   return true;
 };
 
-const submitForm = () => {
+const submitForm = async () => {
   if (!validate()) return;
+
   console.log(JSON.stringify(usersInfo));
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(usersInfo),
+  };
+  const response = await fetch(
+    "https://awesomeurl.ru/users/subscribe",
+    options
+  );
+  const result = await response.json();
+  console.log(result);
 };
 
 // Для замены кнопки submit на моб. и десктоп
