@@ -3,11 +3,12 @@
     <ul class="flex gap-2 flex-wrap justify-center">
       <li
         v-for="(breadcrumb, index) in breadcrumbs"
+        :key="breadcrumb.id"
         class="flex gap-2 items-center"
       >
-        <a :href="breadcrumb.path" class="breadcrumb-link">
+        <RouterLink class="breadcrumb-link" :to="breadcrumb.path">
           {{ breadcrumb.name }}
-        </a>
+        </RouterLink>
         <svg
           v-if="index !== breadcrumbs.length - 1"
           class="fill-secondary--lighter w-[13px] h-4"
@@ -24,6 +25,7 @@ type Props = {
   breadcrumbs: {
     name: string;
     path: string;
+    id: number;
   }[];
 };
 
@@ -32,6 +34,6 @@ const { breadcrumbs } = defineProps<Props>();
 
 <style scoped>
 .breadcrumb-link {
-  @apply text-[13px] font-normal leading-4 text-secondary--lighter transition-colors duration-200 ease-in border-b-accent--lighter-2 border-b border-solid hover:text-black hover:border-accent;
+  @apply font-roboto text-[13px] font-normal leading-4 text-secondary--lighter transition-colors duration-200 ease-in border-b-accent--lighter-2 border-b border-solid hover:text-black hover:border-accent;
 }
 </style>
