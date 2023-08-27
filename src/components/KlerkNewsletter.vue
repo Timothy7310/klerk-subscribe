@@ -8,6 +8,7 @@
   <form
     class="h-14 grid grid-cols-[1fr_max-content] bg-white rounded-[15px_100px_100px_15px] overflow-hidden md:mx-[25px]"
     @submit.prevent="submitForm"
+    novalidate
   >
     <div class="relative">
       <input
@@ -16,6 +17,8 @@
         v-model="usersInfo.email"
         placeholder=""
         id="email"
+        @focusin="validateInfo.isFocused = true"
+        @focusout="focusOut"
       />
       <label class="label" for="email">Электронная почта</label>
     </div>
@@ -36,6 +39,12 @@
       </svg>
     </button>
   </form>
+  <span
+    class="block text-[#ff4464] text-[13px] leading-4 m-[5px_25px_0px_25px]"
+    v-if="validateInfo.hasError && !validateInfo.isFocused"
+  >
+    {{ validateInfo.text }}
+  </span>
   <div class="flex items-center gap-2 mt-4 md:mx-[25px]">
     <KlerkSwitch :options="switchAllOption" @toggleSwitch="handleAllSwitch" />
     <span class="font-roboto text-sm font-normal leading-5">
@@ -249,6 +258,8 @@ const newsList = [
   },
 ];
 
+const validateInfo = reactive({ text: "", hasError: false, isFocused: false });
+
 // Логика Switch и отправки формы
 
 const isSomeSubChecked = () => {
@@ -267,14 +278,34 @@ const handleAllSwitch = () => {
 
 const validate = () => {
   if (!isSomeSubChecked()) {
-    alert("Выберите хотя бы одну подписку");
+    validateInfo.hasError = true;
+    validateInfo.text = "Выберите хотя бы одну подписку";
     return false;
   }
   if (usersInfo.email.length === 0) {
-    alert("Заполните поле email");
+    validateInfo.hasError = true;
+    validateInfo.text = "Обязательно для заполнения";
     return false;
   }
+  const emailReg =
+    /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
+
+  if (!emailReg.test(usersInfo.email)) {
+    validateInfo.hasError = true;
+    validateInfo.text = "Введите адрес электронной почты";
+    return false;
+  }
+
+  validateInfo.hasError = false;
+  validateInfo.text = "";
   return true;
+};
+
+const focusOut = () => {
+  if (validateInfo.hasError) {
+    validate();
+  }
+  validateInfo.isFocused = false;
 };
 
 const submitForm = async () => {
