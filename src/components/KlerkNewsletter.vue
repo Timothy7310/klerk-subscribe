@@ -59,12 +59,7 @@
   <div
     class="grid grid-cols-[1fr] gap-6 mt-[26px] md:grid-cols-[1fr_1fr] md:mt-8"
   >
-    <KlerkNewsItem
-      v-for="news in newsList"
-      :options="news"
-      :key="news.id"
-      @updateSwitch="updateSwitch"
-    />
+    <KlerkNewsItem v-for="news in newsList" :options="news" :key="news.id" />
   </div>
 </template>
 
@@ -76,28 +71,11 @@ import { onMounted, onUnmounted, ref, reactive } from "vue";
 import { useUsersStore } from "@/stores/UsersStore";
 
 const usersStore = useUsersStore();
-const {
-  subscribes: newsList,
-  getUserInfo: usersInfo,
-  switchAll,
-  email,
-} = usersStore;
+const { subscribes: newsList, switchAll, email } = usersStore;
 
 const userEmail = ref(email);
 
 const validateInfo = reactive({ text: "", hasError: false, isFocused: false });
-
-const updateSwitch = ({
-  status,
-  type,
-}: {
-  status: boolean;
-  type: SubscribeType;
-}) => {
-  usersInfo.subscribe = usersInfo.subscribe.map((x) =>
-    x.type === type ? { type: x.type, status } : x
-  );
-};
 
 const validate = () => {
   if (!usersStore.isSomeSubChecked) {
@@ -139,7 +117,7 @@ const submitForm = async () => {
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(usersInfo),
+    body: JSON.stringify(usersStore.getUserInfo),
   };
   const response = await fetch(
     "https://awesomeurl.ru/users/subscribe",
