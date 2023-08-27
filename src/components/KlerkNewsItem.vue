@@ -37,7 +37,8 @@
     >
       <KlerkSwitch
         :options="options.switchOption"
-        @toggle-switch="toggleSwitch"
+        :type="options.type"
+        :is-checked="options.isChecked"
       />
       <span class="font-roboto text-sm font-normal leading-5 text-black">
         Уже получает {{ Number(options.readers).toLocaleString() }}
@@ -62,39 +63,10 @@
 
 <script setup lang="ts">
 import KlerkSwitch from "@/ui/KlerkSwitch.vue";
-import { NewsGoodsType, SubscribeType } from "@/types/index";
+import { NewsGoodsType, SubscribeProps } from "@/types/index";
 import { computed } from "vue";
 
-type Props = {
-  options: {
-    id: number;
-    time: string;
-    title: string;
-    type: SubscribeType;
-    about: string;
-    goods: {
-      text: string;
-      type: NewsGoodsType;
-    }[];
-    readers: number;
-    images: {
-      smallOld: string;
-      bigOld: string;
-      smallModern: string;
-      bigModern: string;
-    };
-    switchOption: {
-      checked: boolean;
-      width: string;
-      backgroundColor: string;
-      backgroundColorDot: string;
-      backgroundColorActive: string;
-      backgroundColorHover: string;
-    };
-  };
-};
-
-const { options } = defineProps<Props>();
+const { options } = defineProps<SubscribeProps>();
 
 const readersPlural = computed(() => {
   const pr = new Intl.PluralRules();
@@ -108,11 +80,6 @@ const readersPlural = computed(() => {
 
   return suffixes.get(form);
 });
-
-const emit = defineEmits(["updateSwitch"]);
-const toggleSwitch = (status: boolean) => {
-  emit("updateSwitch", { status, type: options.type });
-};
 </script>
 
 <style></style>

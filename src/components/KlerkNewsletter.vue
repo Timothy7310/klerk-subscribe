@@ -14,9 +14,10 @@
       <input
         class="input"
         type="email"
-        v-model="usersInfo.email"
         placeholder=""
         id="email"
+        v-model="userEmail"
+        @input="usersStore.saveEmail(userEmail)"
         @focusin="validateInfo.isFocused = true"
         @focusout="focusOut"
       />
@@ -46,7 +47,11 @@
     {{ validateInfo.text }}
   </span>
   <div class="flex items-center gap-2 mt-4 md:mx-[25px]">
-    <KlerkSwitch :options="switchAllOption" @toggleSwitch="handleAllSwitch" />
+    <KlerkSwitch
+      :is-checked="switchAll.isChecked"
+      :options="switchAll"
+      :type="SubscribeType.All"
+    />
     <span class="font-roboto text-sm font-normal leading-5">
       Подписаться на все рассылки
     </span>
@@ -66,223 +71,42 @@
 <script setup lang="ts">
 import KlerkNewsItem from "@/components/KlerkNewsItem.vue";
 import KlerkSwitch from "@/ui/KlerkSwitch.vue";
-import { NewsGoodsType, SubscribeType } from "@/types/index";
-import { onMounted, onUnmounted, ref, reactive, computed } from "vue";
+import { SubscribeType } from "@/types/index";
+import { onMounted, onUnmounted, ref, reactive } from "vue";
+import { useUsersStore } from "@/stores/UsersStore";
 
-// Картинки
-import accountantLightSmallOld from "@/assets/images/accountant-light@1x.png";
-import accountantLightBigOld from "@/assets/images/accountant-light@2x.png";
-import accountantLightSmallModern from "@/assets/images/accountant-light@1x.webp";
-import accountantLightBigModern from "@/assets/images/accountant-light@2x.webp";
-import accountantDarkSmallOld from "@/assets/images/accountant-dark@1x.png";
-import accountantDarkBigOld from "@/assets/images/accountant-dark@2x.png";
-import accountantDarkSmallModern from "@/assets/images/accountant-dark@1x.webp";
-import accountantDarkBigModern from "@/assets/images/accountant-dark@2x.webp";
-import scissorsSmallOld from "@/assets/images/scissors@1x.png";
-import scissorsBigOld from "@/assets/images/scissors@2x.png";
-import scissorsSmallModern from "@/assets/images/scissors@1x.webp";
-import scissorsBigModern from "@/assets/images/scissors@2x.webp";
-import freeSmallOld from "@/assets/images/free@1x.png";
-import freeBigOld from "@/assets/images/free@2x.png";
-import freeSmallModern from "@/assets/images/free@1x.webp";
-import freeBigModern from "@/assets/images/free@2x.webp";
+const usersStore = useUsersStore();
+const {
+  subscribes: newsList,
+  getUserInfo: usersInfo,
+  switchAll,
+  email,
+} = usersStore;
 
-// Данные для рендера подписок и формы
-const usersInfo = reactive({
-  email: "",
-  subscribe: [
-    {
-      type: "Утренний бухгалтер",
-      status: true,
-    },
-    {
-      type: "Ночной бухгалтер",
-      status: false,
-    },
-    {
-      type: "Ножницы скидок",
-      status: false,
-    },
-    {
-      type: "Чемодан вебинаров",
-      status: false,
-    },
-  ],
-});
-
-const switchAllOption = {
-  checked: false,
-  width: "w-[32px]",
-  backgroundColor: "bg-[#eee]",
-  backgroundColorDot: "bg-white",
-  backgroundColorActive: "!bg-accent",
-  backgroundColorHover: "hover:bg-accent--lighter-2",
-};
-
-const getSubscribeStatus = (type: SubscribeType) => {
-  return usersInfo.subscribe.find((x) => x.type === type)?.status ?? false;
-};
-
-const newsList = [
-  {
-    id: 1,
-    time: "Перед рассветом",
-    title: "Утренний бухгалтер",
-    type: SubscribeType.MorningAccountant,
-    about:
-      "Самые важные новости и события за день. Кратко, по делу, структурировано.",
-    goods: [
-      {
-        text: "Новости для бухгалтеров, ИП и директора",
-        type: NewsGoodsType.Common,
-      },
-      {
-        text: "Подборка статей за день",
-        type: NewsGoodsType.Common,
-      },
-    ],
-    readers: 59342,
-    images: {
-      smallOld: accountantLightSmallOld,
-      bigOld: accountantLightBigOld,
-      smallModern: accountantLightSmallModern,
-      bigModern: accountantLightBigModern,
-    },
-    switchOption: {
-      checked: getSubscribeStatus(SubscribeType.MorningAccountant),
-      width: "w-[48px]",
-      backgroundColor: "bg-[#eee]",
-      backgroundColorDot: "bg-white",
-      backgroundColorActive: "!bg-accent",
-      backgroundColorHover: "hover:bg-accent--lighter-2",
-    },
-  },
-  {
-    id: 2,
-    time: "После заката",
-    title: "Ночной бухгалтер",
-    type: SubscribeType.NightAccountant,
-    about:
-      "Самая краткая газета о налогах и бухучете в мире — современная рассылка для вечернего чтения.",
-    goods: [
-      {
-        text: "Новости для бухгалтеров, ИП и директора",
-        type: NewsGoodsType.Common,
-      },
-      {
-        text: "Подборка статей за день",
-        type: NewsGoodsType.Common,
-      },
-    ],
-    readers: 59342,
-    images: {
-      smallOld: accountantDarkSmallOld,
-      bigOld: accountantDarkBigOld,
-      smallModern: accountantDarkSmallModern,
-      bigModern: accountantDarkBigModern,
-    },
-    switchOption: {
-      checked: getSubscribeStatus(SubscribeType.NightAccountant),
-      width: "w-[48px]",
-      backgroundColor: "bg-[#eee]",
-      backgroundColorDot: "bg-white",
-      backgroundColorActive: "!bg-accent",
-      backgroundColorHover: "hover:bg-accent--lighter-2",
-    },
-  },
-  {
-    id: 3,
-    time: "Раз в две недели",
-    title: "Ножницы скидок",
-    type: SubscribeType.Discounts,
-    about:
-      "Подборка самых выгодных и полезных спецпредложений от надежных компаний.",
-    goods: [
-      {
-        text: "Акции и скидки от лидеров рынка",
-        type: NewsGoodsType.Common,
-      },
-      {
-        text: "Те, кто подписался – экономят много денег",
-        type: NewsGoodsType.Common,
-      },
-    ],
-    readers: 92118,
-    images: {
-      smallOld: scissorsSmallOld,
-      bigOld: scissorsBigOld,
-      smallModern: scissorsSmallModern,
-      bigModern: scissorsBigModern,
-    },
-    switchOption: {
-      checked: getSubscribeStatus(SubscribeType.Discounts),
-      width: "w-[48px]",
-      backgroundColor: "bg-[#eee]",
-      backgroundColorDot: "bg-white",
-      backgroundColorActive: "!bg-accent",
-      backgroundColorHover: "hover:bg-accent--lighter-2",
-    },
-  },
-  {
-    id: 4,
-    time: "По мере появления анонсов",
-    title: "Чемодан вебинаров",
-    type: SubscribeType.Webinars,
-    about:
-      "Подборка с анонсами бесплатных вебинаров на самые топовые темы при участии экспертов.",
-    goods: [
-      {
-        text: "Никогда не пришлем платные вебинары",
-        type: NewsGoodsType.Important,
-      },
-      {
-        text: "Подборка топовых тем для вебинаров",
-        type: NewsGoodsType.Common,
-      },
-    ],
-    readers: 92082,
-    images: {
-      smallOld: freeSmallOld,
-      bigOld: freeBigOld,
-      smallModern: freeSmallModern,
-      bigModern: freeBigModern,
-    },
-    switchOption: {
-      checked: getSubscribeStatus(SubscribeType.Webinars),
-      width: "w-[48px]",
-      backgroundColor: "bg-[#eee]",
-      backgroundColorDot: "bg-white",
-      backgroundColorActive: "!bg-accent",
-      backgroundColorHover: "hover:bg-accent--lighter-2",
-    },
-  },
-];
+const userEmail = ref(email);
 
 const validateInfo = reactive({ text: "", hasError: false, isFocused: false });
 
-// Логика Switch и отправки формы
-
-const isSomeSubChecked = () => {
-  return usersInfo.subscribe.map((x) => x.status).some((x) => x);
-};
-
-const updateSwitch = (item: { status: boolean; type: SubscribeType }) => {
+const updateSwitch = ({
+  status,
+  type,
+}: {
+  status: boolean;
+  type: SubscribeType;
+}) => {
   usersInfo.subscribe = usersInfo.subscribe.map((x) =>
-    x.type === item.type ? { type: x.type, status: item.status } : x
+    x.type === type ? { type: x.type, status } : x
   );
 };
 
-const handleAllSwitch = () => {
-  console.log("all switch");
-};
-
 const validate = () => {
-  if (!isSomeSubChecked()) {
+  if (!usersStore.isSomeSubChecked) {
     validateInfo.hasError = true;
     validateInfo.text = "Выберите хотя бы одну подписку";
     return false;
   }
-  if (usersInfo.email.length === 0) {
+
+  if (userEmail.value.length === 0) {
     validateInfo.hasError = true;
     validateInfo.text = "Обязательно для заполнения";
     return false;
@@ -290,7 +114,7 @@ const validate = () => {
   const emailReg =
     /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u;
 
-  if (!emailReg.test(usersInfo.email)) {
+  if (!emailReg.test(userEmail.value)) {
     validateInfo.hasError = true;
     validateInfo.text = "Введите адрес электронной почты";
     return false;
@@ -311,7 +135,7 @@ const focusOut = () => {
 const submitForm = async () => {
   if (!validate()) return;
 
-  console.log(JSON.stringify(usersInfo));
+  console.log(usersStore.getUserInfo);
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -343,7 +167,7 @@ onUnmounted(() => {
 
 <style scoped>
 .input {
-  @apply absolute w-full h-full text-base leading-6 font-normal leading-6 text-black bg-transparent p-4 caret-accent--lighter-1 focus-visible:border-b-2 focus-visible:border-b-accent focus-visible:border-solid;
+  @apply absolute w-full h-full text-base leading-6 font-normal leading-6 text-black bg-transparent p-4 caret-accent--lighter-1 focus-visible:border-b-2 focus-visible:border-b-accent focus-visible:border-solid focus-visible:outline-none;
 }
 
 .label {
@@ -353,9 +177,5 @@ onUnmounted(() => {
 .input:not(:placeholder-shown) ~ .label {
   @apply translate-x-[-58px] translate-y-[-47px] text-accent--lighter-1;
   scale: 0.6;
-}
-
-.input:focus-visible {
-  outline: none;
 }
 </style>

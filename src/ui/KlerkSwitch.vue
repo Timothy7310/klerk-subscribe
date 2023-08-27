@@ -1,47 +1,44 @@
 <template>
   <button
-    @click="toggleSwitch"
+    @click="testToggle"
     type="button"
     role="switch"
-    :aria-checked="checked"
+    :aria-checked="isChecked"
     class="relative aspect-[2_/_1] cursor-pointer shrink-0 rounded-[100px]"
     :class="`${options.width} ${options.backgroundColor} ${
       options.backgroundColorHover
-    } ${checked ? `${options.backgroundColorActive}` : ''}`"
+    } ${isChecked ? `${options.backgroundColorActive}` : ''}`"
   >
     <div
       class="absolute translate-x-[calc(0%_+_3px)] -translate-y-2/4 h-[90%] w-auto aspect-[1_/_1] transition-all duration-[0.2s] ease-[ease-in-out] rounded-[50%] top-2/4"
       :class="`${options.backgroundColorDot} ${
-        checked ? 'translate-x-[calc(100%_+_1px)] -translate-y-2/4' : ''
+        isChecked ? 'translate-x-[calc(100%_+_1px)] -translate-y-2/4' : ''
       }`"
     ></div>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useUsersStore } from "@/stores/UsersStore";
 import { SubscribeType } from "@/types";
 
 type Props = {
   options: {
-    checked: boolean;
     width: string;
     backgroundColor: string;
     backgroundColorActive: string;
     backgroundColorHover: string;
     backgroundColorDot: string;
   };
-  type?: SubscribeType;
+  type: SubscribeType;
+  isChecked: boolean;
 };
 
-const { options, type } = defineProps<Props>();
+const { options, type, isChecked } = defineProps<Props>();
+const usersStore = useUsersStore();
 
-const checked = ref(options.checked);
-
-const emit = defineEmits(["toggleSwitch"]);
-const toggleSwitch = () => {
-  checked.value = !checked.value;
-  emit("toggleSwitch", checked.value);
+const testToggle = () => {
+  usersStore.toggleSwitch(type);
 };
 </script>
 
